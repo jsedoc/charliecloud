@@ -69,12 +69,12 @@ RUN apt-get install -y --no-install-suggests \
     hwloc-nox \
     less \
     libdb5.3-dev \
+    libevent-dev \
     libhwloc-dev \
     libnl-3-200 \
     libnl-route-3-200 \
     libnl-route-3-dev \
     libnuma1 \
-    libpmi2-0-dev \
     make \
     wget \
     udev
@@ -124,6 +124,23 @@ RUN    cd ucx \
     && ./contrib/configure-release --prefix=/usr/local \
     && make -j$(getconf _NPROCESSORS_ONLN) install
 
+# PMIx
+#
+# The version of PMIx embedded in OpenMPI 3.1.4 is 2.1.4, build PMIx 2.2.2 to
+# ensure the latest updates in that series. Not building a later series as 
+# Openmpi 3.1.4 does not have support for them.
+ENV PMIX_URL https://github.com/pmix/pmix/releases/download/
+
+# PMIX_VERSION is used by the configure step, using EX_PMIX_VERSION to avoid
+# collision
+ENV EX_PMIX_VERSION 2.2.2
+RUN wget -nv ${PMIX_URL}/v${EX_PMIX_VERSION}/pmix-${EX_PMIX_VERSION}.tar.gz
+RUN tar xf pmix-${EX_PMIX_VERSION}.tar.gz
+RUN    cd pmix-${EX_PMIX_VERSION} \
+    && ./configure --prefix=/usr/local \
+                   --with-libevent \
+    && make -j$(getconf _NPROCESSORS_ONLN) install
+
 # OpenMPI.
 #
 # Patch OpenMPI to disable UCX plugin on systems with Intel or Cray HSNs. UCX
@@ -139,9 +156,9 @@ RUN    cd openmpi-${MPI_VERSION} \
        CXXFLAGS=-O3 \
        ./configure --prefix=/usr/local \
                    --sysconfdir=/mnt/0 \
+                   --with-libevent \
 		   --with-slurm \
-                   --with-pmi \
-                   --with-pmix \
+                   --with-pmix=/usr/local \
                    --with-ucx \
                    --disable-pty-support \
                    --enable-mca-no-build=btl-openib,plm-slurm \
