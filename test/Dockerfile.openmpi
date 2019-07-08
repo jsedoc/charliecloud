@@ -1,5 +1,5 @@
 # ch-test-scope: full
-FROM debian9
+FROM debian10
 
 # A key goal of this Dockerfile is to demonstrate best practices for building
 # OpenMPI for use inside a container.

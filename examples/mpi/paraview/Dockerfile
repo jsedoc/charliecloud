@@ -69,9 +69,9 @@ RUN rm -Rf mesa-${MESA_VERSION}*
 
 # ParaView. Use system libpng to work around issues linking with NEON specific
 # symbols on ARM.
-ENV PARAVIEW_MAJORMINOR 5.5
-ENV PARAVIEW_VERSION 5.5.2
-RUN wget -nv -O ParaView-v${PARAVIEW_VERSION}.tar.gz "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v${PARAVIEW_MAJORMINOR}&type=binary&os=Sources&downloadFile=ParaView-v${PARAVIEW_VERSION}.tar.gz"
+ENV PARAVIEW_MAJORMINOR 5.6
+ENV PARAVIEW_VERSION 5.6.1
+RUN wget -nv -O ParaView-v${PARAVIEW_VERSION}.tar.gz "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v${PARAVIEW_MAJORMINOR}&type=binary&os=Sources&downloadFile=ParaView-v${PARAVIEW_VERSION}.tar.xz"
 RUN tar xf ParaView-v${PARAVIEW_VERSION}.tar.gz
 RUN mkdir ParaView-v${PARAVIEW_VERSION}.build
 RUN    cd ParaView-v${PARAVIEW_VERSION}.build \
