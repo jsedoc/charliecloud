@@ -31,8 +31,8 @@ fromhost_ls () {
 
 @test 'ch-fromhost (Debian)' {
     scope standard
-    prerequisites_ok debian9
-    img=${ch_imgdir}/debian9
+    prerequisites_ok debian10
+    img=${ch_imgdir}/debian10
 
     libpath=$(ch-fromhost --lib-path "$img")
     echo "libpath: ${libpath}"
@@ -131,8 +131,8 @@ fromhost_ls () {
 
 @test 'ch-fromhost errors' {
     scope standard
-    prerequisites_ok debian9
-    img=${ch_imgdir}/debian9
+    prerequisites_ok debian10
+    img=${ch_imgdir}/debian10
 
     # no image
     run ch-fromhost --path sotest/sotest.c

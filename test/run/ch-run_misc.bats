@@ -359,8 +359,8 @@ EOF
 
 @test 'ch-run --set-env from Dockerfile' {
     scope standard
-    prerequisites_ok debian9
-    img=${ch_imgdir}/debian9
+    prerequisites_ok debian10
+    img=${ch_imgdir}/debian10
 
     output_expected=$(cat <<'EOF'
 chse_dockerfile=foo

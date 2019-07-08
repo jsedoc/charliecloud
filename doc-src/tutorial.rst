@@ -588,9 +588,9 @@ Third-party software compiled from source
 Under this method, one uses :code:`RUN` commands to fetch the desired software
 using :code:`curl` or :code:`wget`, compile it, and install. Our example does
 this with two chained Dockerfiles. First, we build a basic Debian image
-(:code:`test/Dockerfile.debian9`):
+(:code:`test/Dockerfile.debian10`):
 
-.. literalinclude:: ../test/Dockerfile.debian9
+.. literalinclude:: ../test/Dockerfile.debian10
    :language: docker
    :lines: 2-
 

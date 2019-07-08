@@ -1,5 +1,5 @@
 # ch-test-scope: full
-FROM debian9
+FROM debian10
 
 # The MPICH example has a smaller scope than the OpenMPI example. We want to
 # provide an MPICH build that works on a single node and (via ch-fromhost
