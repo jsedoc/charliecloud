@@ -58,6 +58,8 @@ FROM debian10
 # [1]: https://github.com/open-mpi/ompi/blob/master/README
 
 # OS packages needed to build this stuff.
+# We have seen issues that stemmed from some version of libibverbs conflicting
+# with host drivers. The defaults work for our systems though.
 RUN apt-get install -y --no-install-suggests \
     autoconf \
     file \
@@ -67,53 +69,34 @@ RUN apt-get install -y --no-install-suggests \
     gfortran \
     git \
     hwloc-nox \
+    ibacm \
+    ibverbs-providers \
+    ibverbs-utils \
     less \
     libdb5.3-dev \
     libhwloc-dev \
+    libibumad-dev \
+    libibumad3 \
+    libibverbs-dev \
     libnl-3-200 \
     libnl-route-3-200 \
     libnl-route-3-dev \
     libnuma1 \
     libpmi2-0-dev \
+    librdmacm-dev \
+    librdmacm1 \
     make \
-    wget \
-    udev
+    rdma-core \
+    rdmacm-utils \
+    udev \
+    wget
 
 WORKDIR /usr/local/src
 
-# Use the Buster versions of libpsm2 (not present in Stretch) and libibverbs
-# (too old in Stretch). Download manually because I'm too lazy to set up
-# package pinning.
-#
 # Note that libpsm2 is x86-64 only:
-#   https://packages.debian.org/buster/libpsm2-2
-#   https://lists.debian.org/debian-hpc/2017/12/msg00015.html
-ENV DEB_URL http://snapshot.debian.org/archive/debian/20181126T030749Z/pool/main
-ENV PSM2_VERSION 11.2.68-3
 RUN if [ "$(dpkg --print-architecture)" = "amd64" ] ; then \
-      wget -nv ${DEB_URL}/libp/libpsm2/libpsm2-2_${PSM2_VERSION}_amd64.deb \
-               ${DEB_URL}/libp/libpsm2/libpsm2-dev_${PSM2_VERSION}_amd64.deb ; \
+         apt-get install -y --no-install-suggests libpsm2-2 libpsm2-dev ; \
     fi
-# As of 5/2/2019, this is not the newest libibverbs. However, it is the
-# newest that doesn't crash on our test systems.
-ENV IBVERBS_VERSION 20.0-1
-RUN for i in ibacm \
-             ibverbs-providers \
-             ibverbs-utils \
-             libibumad-dev \
-             libibumad3 \
-             libibverbs-dev \
-             libibverbs1 \
-             librdmacm-dev \
-             librdmacm1 \
-             rdma-core \
-             rdmacm-utils ; \
-    do \
-        wget -nv ${DEB_URL}/r/rdma-core/${i}_${IBVERBS_VERSION}_$(dpkg --print-architecture).deb ; \
-    done
-
-# Install the .debs we collected. UCX needs these.
-RUN dpkg --install *.deb
 
 # UCX. There is stuff to build Debian packages, but it seems not too polished.
 ENV UCX_VERSION 1.3.1
