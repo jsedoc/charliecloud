@@ -1,5 +1,5 @@
 # ch-test-scope: full
-FROM debian9
+FROM centos8
 
 # Note: Spack is a bit of an odd duck testing wise. Because it's a package
 # manager, the key tests we want are to install stuff (this includes the Spack
@@ -9,16 +9,16 @@ FROM debian9
 
 # Spack needs curl, git, make, and unzip to install.
 # The other packages are needed for Spack unit tests.
-RUN apt-get install -y \
-    curl \
-    g++ \
+RUN dnf install -y \
+    bzip2 \
+    gcc-c++ \
     git \
     make \
     patch \
-    procps \
-    python \
-    python-pkg-resources \
-    unzip
+    python3 \
+    python3-setuptools \
+    unzip \
+    which
 
 # Certain Spack packages (e.g., tar) puke if they detect themselves being
 # configured as UID 0. This is the override. See issue #540.

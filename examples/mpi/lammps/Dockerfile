@@ -1,19 +1,18 @@
 # ch-test-scope: full
 FROM openmpi
-WORKDIR /usr/local/src
+WORKDIR /usr/src
 
 # Packages for building.
-RUN apt-get install -qy --no-install-recommends \
+RUN dnf install -y \
     cmake \
-    git \
     patch \
-    python-dev \
-    python-pip \
-    python-setuptools 
+    python3-devel \
+    python3-pip \
+    python3-setuptools
 
 # Building mpi4py from source to ensure it is built against our MPI build
 # Building numpy from source to work around issues seen on Aarch64 systems
-RUN pip install --no-binary=mpi4py,numpy mpi4py numpy 
+RUN pip3 install --no-binary :all: mpi4py numpy
 # Build LAMMPS.
 ENV LAMMPS_VERSION 19Sep19
 RUN wget -nv http://lammps.sandia.gov/tars/lammps-$LAMMPS_VERSION.tar.gz
@@ -34,7 +33,7 @@ RUN    cd lammps-${LAMMPS_VERSION}.build \
              -DLAMMPS_MACHINE=mpi \
           ../lammps-${LAMMPS_VERSION}/cmake \
     && make -j $(getconf _NPROCESSORS_ONLN) install
-RUN ln -s /usr/local/src/lammps-${LAMMPS_VERSION}/ /lammps
+RUN ln -s /usr/src/lammps-${LAMMPS_VERSION}/ /lammps
 # Patch in.melt instead of including in.large.melt because LAMMPS is GPL.
 # Patch simple.py to uncomment mpi4py calls and disable file output.
 COPY melt-and-simple.patch /lammps

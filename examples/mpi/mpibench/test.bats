@@ -4,15 +4,15 @@ setup () {
     scope full
     prerequisites_ok "$ch_tag"
 
-    # - One iteration on most of these tests because we just care about 
-    #   correctness, not performance. (If we let the benchmark choose, 
-    #   there is an overwhelming number of errors when MPI calls start 
-    #   failing, e.g. if CMA isn't working, and this makes the test take 
+    # - One iteration on most of these tests because we just care about
+    #   correctness, not performance. (If we let the benchmark choose,
+    #   there is an overwhelming number of errors when MPI calls start
+    #   failing, e.g. if CMA isn't working, and this makes the test take
     #   really long.)
     #
     # - Large -npmin because we only want to test all cores.
     #
-    imb_mpi1=/usr/local/src/mpi-benchmarks/src/IMB-MPI1
+    imb_mpi1=/usr/src/mpi-benchmarks/src/IMB-MPI1
     imb_args="-iter 1 -npmin 1000000000"
 
     # - On the test we do care about performance we want to run multiple
